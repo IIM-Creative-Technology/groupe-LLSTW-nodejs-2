@@ -1,0 +1,40 @@
+extends layouts/main-layout.pug
+
+block content
+    h1 Messagerie
+
+    .chat
+        div#logout
+            p Bonjour <strong>#{userLoggedIn.username}</strong>, vous êtes connectés à la messagerie.
+            a(href='/logout') Se déconnecter
+
+        ul#list
+            each message in messages
+                li.messages 
+                    div #{message.content}
+                    //-
+                        div #{message.createdAt}
+                    div #{message.username}
+        form(method="post", onsubmit="event.preventDefault(); sendMessage();")
+            input(id="input" autocomplete="off" placeholder="Votre message ..." name="content")
+            button Send
+        script(src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous")
+        script(src="/js/post.js")
+        script.
+
+            socket.on('insertMessage', (message) => {
+                console.log(message);
+                const msg = document.getElementById('list');
+                let li = document.createElement('li');
+                let content = document.createElement('div');
+                let username = document.createElement('div');
+                content.innerHTML = message;
+                username.innerHTML = "#{userLoggedIn.username}";
+                li.appendChild(content);
+                li.appendChild(username);
+                li.classList.add('messages');
+                msg.appendChild(li);
+            });
+            
+
+            

@@ -1,0 +1,28 @@
+extends layouts/main-layout.pug
+
+block content
+    .login
+        h1 Création d'un compte
+        form#registerForm(method="post", onsubmit="event.preventDefault(); validateForm();")
+
+            p.errorMessage #{errorMessage}
+
+            input(type="text", name="username", placeholder="Nom d'utilisateur", value=username required="")
+            input#password(type="password", name="password", placeholder="Mot de passe", required="")
+            input#password-confirmation(type="password", name="password-confirmation", placeholder="Confirmation mot de passe", required="")
+            input(type="submit", value="Créer le compte")
+        a(href="/login") Déjà un compte? Se connecter.
+    
+    script.
+        var passwordField = document.getElementById("password")
+        var passwordConfirmField = document.getElementById("password-confirmation")
+        var form = document.getElementById("registerForm")
+
+        function validateForm() {
+            if(passwordField.value != passwordConfirmField.value) {
+                alert("Passwords do not match. Please try again.")
+            }
+            else {
+                form.submit();
+            }
+        }
